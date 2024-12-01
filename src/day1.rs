@@ -2,7 +2,7 @@ use aoc_runner_derive::aoc;
 use std::collections::HashMap;
 
 #[aoc(day1, part1)]
-pub fn solve_part1(input: &str) -> i32 {
+pub fn part1(input: &str) -> i32 {
     let mut l_values = Vec::<i32>::with_capacity(1000);
     let mut r_values = Vec::<i32>::with_capacity(1000);
     for line in input.lines() {
@@ -20,7 +20,7 @@ pub fn solve_part1(input: &str) -> i32 {
 }
 
 #[aoc(day1, part2)]
-pub fn solve_part2(input: &str) -> i32 {
+pub fn part2(input: &str) -> i32 {
     let mut l_values = Vec::<i32>::with_capacity(1000);
     let mut r_values = HashMap::<i32, i32>::new();
     for line in input.lines() {
