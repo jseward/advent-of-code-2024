@@ -51,15 +51,11 @@ pub fn part1(input: &str) -> i32 {
 
 fn is_report_safe_part2(line: &str) -> bool {
     let values :Vec<i32> = line.split_whitespace().map(|s| s.parse::<i32>().unwrap()).collect();
-    let mut is_safe =
-        is_report_safe_part2_parsed(&values, false) ||
-        is_report_safe_part2_parsed(&values[1..], true);
-    if !is_safe {
-        // handle the edge case of 10 13 9 8 7 - remove 13 to make safe
-        let mut clone = values.clone();
-        clone.remove(1);
-        is_safe = is_report_safe_part2_parsed(&clone, true);
-    }
+    let is_safe =
+        is_report_safe_part2_parsed(&values, false, true) ||
+        is_report_safe_part2_parsed(&values, false, false) ||
+        is_report_safe_part2_parsed(&values[1..], true, true) ||
+        is_report_safe_part2_parsed(&values[1..], true, false);
 
     //brute force to figure out what algo above is missing ...
     // for i in 0..values.len() {
@@ -74,10 +70,9 @@ fn is_report_safe_part2(line: &str) -> bool {
     is_safe
 }
 
-fn is_report_safe_part2_parsed(values : &[i32], removed_bad_in : bool) -> bool {
+fn is_report_safe_part2_parsed(values : &[i32], removed_bad_in : bool, is_increasing_at_start : bool) -> bool {
 
     let mut is_unsafe = false;
-    let mut is_increasing_at_start : Option<bool> = None;
 
     let mut iter = values.iter();
     let mut prev = iter.next().unwrap();
@@ -89,16 +84,9 @@ fn is_report_safe_part2_parsed(values : &[i32], removed_bad_in : bool) -> bool {
                 is_unsafe = true;
             },
             Some(is_increasing_now) => {
-                match is_increasing_at_start {
-                    None => {
-                        is_increasing_at_start = Some(is_increasing_now);
-                    }
-                    Some(is_increasing_at_start) => {
-                        if is_increasing_now != is_increasing_at_start {
-                            is_unsafe = true;
-                        }        
-                    }
-                }
+                if is_increasing_now != is_increasing_at_start {
+                    is_unsafe = true;
+                }        
             }
         }
 
