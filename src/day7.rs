@@ -84,52 +84,48 @@ pub fn part1(input: &str) -> u64 {
 
 struct Equation2 {
     answer : u64,
-    values : Vec<String>
+    values : Vec<(String, u64)>
 }
 
 fn parse_line2(line : &str) -> Equation2 {
     let parts : Vec<&str> = line.split(':').collect();
     let answer = parts.get(0).unwrap().parse().unwrap();
-    let values : Vec<String> = parts.get(1).unwrap().split_whitespace().into_iter().map(|s| s.to_string()).collect();
+    let values : Vec<(String, u64)> = parts.get(1).unwrap().split_whitespace().into_iter().map(|s| (s.to_string(), s.parse::<u64>().unwrap())).collect();
     Equation2 {
         answer,
         values
     }
 }
 
-fn process_equation2(ans : u64, curr_value_s : &String, next_values : &Vec<String>) -> bool {
+fn process_equation2(ans : u64, curr_value : &(&str, u64), next_values : &[(&str, u64)]) -> bool {
 
     //println!("{:?} : [{}]", curr_value_s, next_values.join(" "));
 
-    let curr_v = curr_value_s.parse::<u64>().unwrap(); 
+    if curr_value.1 <= ans {
+        if let Some(next) = next_values.get(0) {
+            let mul_v = curr_value.1 * next.1;
+            let add_v = curr_value.1 + next.1;
+            let mut concat_s = String::with_capacity(curr_value.0.len() + next.0.len());
+            concat_s.push_str(curr_value.0);
+            concat_s.push_str(next.0);
+            
+            let recurse_vals = &next_values[1..];
+            if process_equation2(ans, &(&mul_v.to_string(), mul_v), &recurse_vals) {
+                return true;
+            }
 
-    if let Some(next_s) = next_values.get(0) {
-        let next_v = next_s.parse::<u64>().unwrap();
+            if process_equation2(ans, &(&add_v.to_string(), add_v), &recurse_vals) {
+                return true;
+            }
 
-        let mul_v = curr_v * next_v;
-        let add_v = curr_v + next_v;
-        let mut concat_s = curr_value_s.clone();
-        concat_s += next_s;
-        
-        let recurse_vals : Vec<String> = next_values[1..].iter().map(|s| s.clone()).collect();
-        if process_equation2(ans, &mul_v.to_string(), &recurse_vals) {
-            return true;
-        }
-
-        if process_equation2(ans, &add_v.to_string(), &recurse_vals) {
-            return true;
-        }
-
-        return process_equation2(ans, &concat_s, &recurse_vals);
-    }
-    else {
-        if curr_v == ans {
-            return true;
+            return process_equation2(ans, &(&concat_s, concat_s.parse::<u64>().unwrap()), &recurse_vals);
         }
         else {
-            return false;
+            return curr_value.1 == ans;
         }
     }
+
+    false
 }
 
 #[aoc(day7, part2)]
@@ -139,7 +135,7 @@ pub fn part2(input: &str) -> u64 {
         let eq = parse_line2(line);
         let mut iter = eq.values.iter();
         let s = iter.next().unwrap();
-        if process_equation2(eq.answer, s, &iter.map(|s| s.clone()).collect()) {
+        if process_equation2(eq.answer, &(s.0.as_str(), s.1), &Vec::from_iter(iter.map(|s| (s.0.as_str(), s.1)))) {
             acc += eq.answer;
         }
     }
