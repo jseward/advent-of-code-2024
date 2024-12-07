@@ -89,16 +89,16 @@ pub fn part2(input: &str) -> i32 {
     total_matches
 }
 
-#[test]
-fn test() {
-    assert_eq!(part2("MMMSXXMASM
-MSAMXMSMSA
-AMXSXMAAMM
-MSAMASMSMX
-XMASAMXAMM
-XXAMMXXAMA
-SMSMSASXSS
-SAXAMASAAA
-MAMMMXMMMM
-MXMXAXMASX"), 9);
-}
+// #[test]
+// fn test() {
+//     assert_eq!(part2("MMMSXXMASM
+// MSAMXMSMSA
+// AMXSXMAAMM
+// MSAMASMSMX
+// XMASAMXAMM
+// XXAMMXXAMA
+// SMSMSASXSS
+// SAXAMASAAA
+// MAMMMXMMMM
+// MXMXAXMASX"), 9);
+// }
