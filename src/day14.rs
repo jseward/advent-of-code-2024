@@ -84,23 +84,23 @@ pub fn part1(input: &str) -> i32 {
 //529920
 //217328832
 
-fn print_tiles(tiles : HashMap<Vec2, i32>, width : i32, height : i32) {
-    for y in 0..height {
-        let mut line = String::new();
-        for x in 0..width {
-            line += match tiles.get(&Vec2{x,y}) {
-                Some(_) => {
-                    match y == height / 2 {
-                        true => "!",
-                        false => "*"
-                    }
-                },
-                None => "."
-            }
-        }
-        println!("{line}");
-    }
-}
+// fn print_tiles(tiles : HashMap<Vec2, i32>, width : i32, height : i32) {
+//     for y in 0..height {
+//         let mut line = String::new();
+//         for x in 0..width {
+//             line += match tiles.get(&Vec2{x,y}) {
+//                 Some(_) => {
+//                     match y == height / 2 {
+//                         true => "!",
+//                         false => "*"
+//                     }
+//                 },
+//                 None => "."
+//             }
+//         }
+//         println!("{line}");
+//     }
+// }
 
 // fn detect_tree(tiles : &HashMap<Vec2, i32>, width : i32, height : i32) -> i32 {
 //     let mut score = 0.0;
